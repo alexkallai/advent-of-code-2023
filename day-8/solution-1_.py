@@ -88,6 +88,3 @@ sorted_list = sorted(list_of_hands, key=lambda x: x[2]+x[3])
 
 final = [(i+1)*x[1] for i, x in enumerate(sorted_list)]
 print(sum(final))
-
-final = [(i+1)*x[1] for i, x in enumerate(sorted_list)]
-print(sum(final))
