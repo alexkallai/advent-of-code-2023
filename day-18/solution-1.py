@@ -4,6 +4,7 @@ from collections import Counter
 from itertools import pairwise, zip_longest
 import copy
 import re
+from matplotlib import pyplot as plt
 
 file_folder_path = Path(__file__).parent
 file_arg = os.path.join(file_folder_path, "input.txt")
@@ -62,22 +63,29 @@ coords_set = set(coords)
     #matrix[coord[1]][coord[0]] = "#"
 
 def check_if_inside_area(line_idx, char_idx):
-    u_range = range(line_idx, 0, -1)
-    d_range = range(line_idx, max_x)
-    l_range = range(char_idx, 0, -1)
-    r_range = range(char_idx, max_y)
+    u_range = range(line_idx, min_x-1, -1)
+    d_range = range(line_idx, max_x+1)
+    l_range = range(char_idx, min_y-1, -1)
+    r_range = range(char_idx, max_y+1)
 
-    for coord in zip_longest(u_range, [char_idx], fillvalue=char_idx):
-        print(coord)
+    up_list = set(list(zip_longest(u_range, [char_idx], fillvalue=char_idx)))
+    down_list = set(list(zip_longest(d_range, [char_idx], fillvalue=char_idx)))
+    right_list = set(list(zip_longest([line_idx], r_range, fillvalue=line_idx)))
+    left_list = set(list(zip_longest([line_idx], l_range, fillvalue=line_idx)))
+    summary = [len(coords_set.intersection(a))>0 for a in [up_list, down_list, right_list, left_list]]
+    if all(summary):
+        return True
+    pass
 
 
-
-
-
-for line_idx in range(min_x, max_x+1):
-    for char_idx in range(min_y, max_y+1):
-        if check_if_inside_area(line_idx, char_idx):
-            coords_set.add((line_idx, char_idx))
-
+for  char_idx in range(min_x-1, max_x+2):
+    for line_idx in range(min_y-1, max_y+2):
+        if check_if_inside_area(char_idx, line_idx):
+            #coords_set.add((line_idx, char_idx))
+            coords_set.add((char_idx, line_idx))
+plt.scatter([item[0] for item in list(coords_set)], [item[1] for item in list(coords_set)])
+plt.show() 
 print(len(coords_set))
+# 35630 too low
+# 76913 too high
 pass
